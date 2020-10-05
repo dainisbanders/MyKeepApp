@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -24,7 +23,7 @@ import lv.db.mobile.rtu_android.keep.database.KeepNote
 class DetailActivity : AppCompatActivity() {
 
     private val db get() = Database.getInstance(this)
-    private val TAG = "DetailsActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -116,7 +115,6 @@ class DetailActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                Log.v(TAG, "setOnItemSelectedListener!!!" + position );
                 detailsLayout.setBackgroundColor(when (position) {
                     1 -> Color.GREEN
                     2 -> Color.YELLOW
