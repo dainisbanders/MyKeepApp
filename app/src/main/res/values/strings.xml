@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name" translatable="false">MyKeepApp</string>
+    <string name="preferences_file_key" translatable="false">lv.db.mobile.rtu_android.keep.PREFERENCES_FILE</string>
+
+    <string name="app_color">App color</string>
+
+    <string name="details_title">Title</string>
+    <string name="details_text">Text</string>
+    <string name="details_color">Color</string>
+    <string name="btn_insert">Insert</string>
+    <string name="btn_update">Update</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_share">Share to e-mail</string>
+
+    <string name="delete_alert_title">Delete note?</string>
+    <string name="delete_alert_text">Are you sure you want to delete note?</string>
+    <string name="delete_alert_button_ok">OK</string>
+    <string name="delete_alert_button_cancel">CANCEL</string>
+
+    <string name="insert_alert_title">Alert</string>
+    <string name="insert_alert_text">Please enter title and/or text!</string>
+    <string name="insert_alert_button_ok">OK</string>
+
+    <string name="color_light_blue">Light blue</string>
+    <string name="color_green">Green</string>
+    <string name="color_yellow">Yellow</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_gray">Gray</string>
+</resources>

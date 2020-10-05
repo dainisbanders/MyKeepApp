@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_color">Aplikācijas krāsa</string>
+
+    <string name="details_title">Nosaukums</string>
+    <string name="details_text">Teksts</string>
+    <string name="details_color">Krāsa</string>
+    <string name="btn_insert">Pievienot</string>
+    <string name="btn_update">Labot</string>
+    <string name="btn_delete">Dzēst</string>
+    <string name="btn_share">Nosūtīt uz e-pastu</string>
+
+    <string name="delete_alert_title">Dzēst piezīmi?</string>
+    <string name="delete_alert_text">Vai esat pārliecināts ka gribat dzēst piezīmi?</string>
+    <string name="delete_alert_button_ok">JĀ</string>
+    <string name="delete_alert_button_cancel">ATCELT</string>
+
+    <string name="insert_alert_title">Paziņojums</string>
+    <string name="insert_alert_text">Lūdzu ievadiet nosaukumu un/vai tekstu!</string>
+    <string name="insert_alert_button_ok">LABI</string>
+
+    <string name="color_light_blue">Gaiši zila</string>
+    <string name="color_green">Zaļa</string>
+    <string name="color_yellow">Dzeltena</string>
+    <string name="color_orange">Oranža</string>
+    <string name="color_gray">Pelēka</string>
+</resources>
