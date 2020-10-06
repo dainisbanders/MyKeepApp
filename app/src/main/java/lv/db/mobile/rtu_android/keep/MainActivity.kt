@@ -136,6 +136,7 @@ class MainActivity : AppCompatActivity(), AdapterClickListener {
         const val EXTRA_ACTION_VIEW = "lv.db.mobile.extras.keep_notes_action_view"
         const val REQUEST_CODE_DETAILS = 1234
         const val APP_THEME = "lv.db.mobile.extras.keep_notes_theme"
+        const val IMAGE_PICK_CODE = 1000
     }
 }
 

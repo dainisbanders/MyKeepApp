@@ -1,5 +1,6 @@
 package lv.db.mobile.rtu_android.keep.adapter
 
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import kotlinx.android.synthetic.main.keep_item.view.*
 import lv.db.mobile.rtu_android.keep.AdapterClickListener
 import lv.db.mobile.rtu_android.keep.R
 import lv.db.mobile.rtu_android.keep.database.KeepNote
+import java.io.File
 
 class KeepNotesRecyclerAdapter(
     private val listener: AdapterClickListener,
@@ -41,6 +43,16 @@ class KeepNotesRecyclerAdapter(
                 else -> Color.parseColor("#E3F2FD")
             }
         )
+
+        if (!note.image_path.isNullOrEmpty()) {
+            val imageFile = File(note.image_path)
+            if (imageFile.exists()) {
+                val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+                holder.itemView.keepPicture.setImageBitmap(bitmap)
+            }
+        } else {
+            holder.itemView.keepPicture.setImageDrawable(null)
+        }
 
         holder.itemView.setOnClickListener {
             listener.itemClicked(notes[position])

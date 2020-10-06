@@ -7,6 +7,7 @@ data class KeepNote(
     val title: String,
     val text: String,
     val color_id: Int,
+    val image_path: String,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 )
 

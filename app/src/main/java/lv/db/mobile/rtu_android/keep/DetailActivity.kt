@@ -1,10 +1,14 @@
 package lv.db.mobile.rtu_android.keep
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -16,13 +20,16 @@ import lv.db.mobile.rtu_android.keep.MainActivity.Companion.EXTRA_ACTION_DELETE
 import lv.db.mobile.rtu_android.keep.MainActivity.Companion.EXTRA_ACTION_INSERT
 import lv.db.mobile.rtu_android.keep.MainActivity.Companion.EXTRA_ACTION_VIEW
 import lv.db.mobile.rtu_android.keep.MainActivity.Companion.EXTRA_ID
+import lv.db.mobile.rtu_android.keep.MainActivity.Companion.IMAGE_PICK_CODE
 import lv.db.mobile.rtu_android.keep.database.Database
 import lv.db.mobile.rtu_android.keep.database.KeepNote
+import java.io.File
 
 
 class DetailActivity : AppCompatActivity() {
 
     private val db get() = Database.getInstance(this)
+    private var detailsPicturePath = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,17 +49,24 @@ class DetailActivity : AppCompatActivity() {
             detailsTitle.setText(note.title)
             detailsText.setText(note.text)
             detailsColor.setSelection(note.color_id)
+            detailsPicturePath = note.image_path
+            val imageFile = File(detailsPicturePath)
+            if (imageFile.exists()) {
+                val bitmap = BitmapFactory.decodeFile(imageFile.absolutePath)
+                detailsPicture.setImageBitmap(bitmap)
+            }
             detailsUpsert.text = getString(R.string.btn_update)
             detailsDelete.visibility = View.VISIBLE
         } else {
             detailsDelete.visibility = View.INVISIBLE
             detailsShareToEmail.visibility = View.INVISIBLE
             detailsUpsert.text = getString(R.string.btn_insert)
+            detailsPicturePath = ""
         }
 
         detailsUpsert.setOnClickListener {
             if (EXTRA_ACTION_INSERT == action) {
-                if (detailsTitle.text.toString() == "" && detailsText.text.toString() == "") {
+                if (detailsTitle.text.toString().isNullOrEmpty() && detailsText.text.toString().isNullOrEmpty()) {
                     val builder = AlertDialog.Builder(this)
 
                     builder.setTitle(getString(R.string.insert_alert_title))
@@ -65,7 +79,8 @@ class DetailActivity : AppCompatActivity() {
                     val note = KeepNote(
                         detailsTitle.text.toString(),
                         detailsText.text.toString(),
-                        detailsColor.selectedItemPosition
+                        detailsColor.selectedItemPosition,
+                        detailsPicturePath
                     )
                     note.id = db.keepNotesDao().insertAll(note).first()
                     val intent = Intent().putExtra(EXTRA_ID, note.id).putExtra(EXTRA_ACTION, action)
@@ -78,7 +93,8 @@ class DetailActivity : AppCompatActivity() {
                     note.copy(
                         title = detailsTitle.text.toString(),
                         text = detailsText.text.toString(),
-                        color_id = detailsColor.selectedItemPosition
+                        color_id = detailsColor.selectedItemPosition,
+                        image_path = detailsPicturePath
                     )
                 )
                 val intent = Intent().putExtra(EXTRA_ID, note.id).putExtra(EXTRA_ACTION, action)
@@ -107,7 +123,6 @@ class DetailActivity : AppCompatActivity() {
 
         }
 
-
         detailsColor.setOnItemSelectedListener(object : OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -134,11 +149,35 @@ class DetailActivity : AppCompatActivity() {
                 //putExtra(Intent.EXTRA_EMAIL, arrayOf(detailsEmail.text.toString()))
                 putExtra(Intent.EXTRA_SUBJECT, detailsTitle.text.toString())
                 putExtra(Intent.EXTRA_TEXT, detailsText.text.toString())
+                putExtra(Intent.EXTRA_STREAM, detailsPicturePath)
             }
             if (intent.resolveActivity(packageManager) != null) {
                 startActivity(intent)
             }
         }
+
+        detailsPictureBrowse.setOnClickListener { pickImageFromGallery() }
+    }
+
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_PICK_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE && data != null) {
+            detailsPicture.setImageURI(data.data)
+            detailsPicturePath = getRealPathFromURI(data.data)
+        }
+    }
+
+    private fun getRealPathFromURI(contentUri: Uri?): String {
+        val proj = arrayOf(MediaStore.Audio.Media.DATA)
+        val cursor: Cursor = managedQuery(contentUri, proj, null, null, null)
+        val columnIndex: Int = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+        cursor.moveToFirst()
+        return cursor.getString(columnIndex)
     }
 }
-
